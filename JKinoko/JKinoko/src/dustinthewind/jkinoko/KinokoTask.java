@@ -16,6 +16,16 @@
 
 package dustinthewind.jkinoko;
 
+/**
+ * Represents the task that is tested by Kinoko.
+ * 
+ * @author Alez
+ * 
+ */
 public interface KinokoTask {
+
+	/**
+	 * The method that is tested by Kinoko.
+	 */
 	public void run();
 }

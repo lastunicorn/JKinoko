@@ -29,9 +29,9 @@ import dustinthewind.utils.Math;
 public class KinokoResult {
 
 	/**
-	 * The list of times measured for every run of the task.
+	 * The list of time measurements for every run of the task.
 	 */
-	private ArrayList<Double> times;
+	private ArrayList<Double> measurements;
 
 	/**
 	 * The average value of the values contained by the 'times' list. This field is calculated by
@@ -43,7 +43,7 @@ public class KinokoResult {
 	 * Gets the average value of the values contained by the 'times' list. Before calling this
 	 * method call the 'calculate()' method.
 	 * 
-	 * @return
+	 * @return A double value representing the calculated average from the measured times.
 	 */
 	public double getAverage() {
 		return average;
@@ -53,24 +53,24 @@ public class KinokoResult {
 	 * Initializes a new instance of the KinokoResult class.
 	 */
 	public KinokoResult() {
-		times = new ArrayList<Double>();
+		measurements = new ArrayList<Double>();
 		average = 0D;
 	}
 
 	/**
-	 * Add a new time to the list.
+	 * Adds a new time measurement to the list.
 	 * 
 	 * @param time
 	 *            The time in milliseconds.
 	 */
-	public void addValue(double time) {
-		times.add(time);
+	public void addMeasurement(double time) {
+		measurements.add(time);
 	}
 
 	/**
-	 * Calculates the average of the values from the times list. 
+	 * Calculates the average of the values from the time measurements list.
 	 */
 	public void calculate() {
-		average = Math.average(times.toArray(new Double[0]));
+		average = Math.average(measurements.toArray(new Double[0]));
 	}
 }
