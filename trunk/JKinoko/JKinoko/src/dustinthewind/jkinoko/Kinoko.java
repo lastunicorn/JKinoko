@@ -24,7 +24,7 @@ import dustinthewind.utils.Stopwatch;
 
 /**
  * Runs a task and measures the time necessary to finish. The task is run multiple times and an
- * average is calculated.
+ * average is calculated. The instance members are not thread safe.
  * 
  * @author Alez
  * 
@@ -107,7 +107,6 @@ public class Kinoko {
 		}
 	}
 
-	
 	/**
 	 * The task that is tested by Kinoko.
 	 */
@@ -201,7 +200,7 @@ public class Kinoko {
 
 			// Store the time in which the task run.
 			double milis = stopwatch.getElapsedMilliseconds();
-			result.addValue(milis);
+			result.addMeasurement(milis);
 
 			// Announce that the Task was run.
 			fireAfterTaskRunEvent(new AfterTaskRunEventObject(this, i, milis));

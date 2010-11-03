@@ -3,7 +3,6 @@
 	
 	<!-- Project directories -->
 	<property name="src.dir" location="src" />
-	<property name="lib.dir" location="lib" />
 	<property name="licenses.dir" location="licenses" />
 	
 	<!-- Dist directories -->
@@ -23,12 +22,6 @@
         <format property="zip.time" pattern="yyyy MM dd HHmm" />
     </tstamp>
     <property name="zip.file.name" value="JKinoko - ${zip.time} - ${dist.version.num}.zip"/>
-
-	<path id="cp">
-		<fileset dir="${lib.dir}">
-			<include name="**/*.jar" />
-		</fileset>
-	</path>
 
 	<!-- ================================= 
           target: distZip
@@ -74,7 +67,7 @@
          - - - - - - - - - - - - - - - - - -->
 	<target name="compile" depends="init">
 		<echo level="info">Compiling source files</echo>
-		<javac srcdir="${src.dir}" destdir="${build.dir}" classpathref="cp" />
+		<javac srcdir="${src.dir}" destdir="${build.dir}" />
 	</target>
 
     <!-- - - - - - - - - - - - - - - - - - 
@@ -93,11 +86,6 @@
          - - - - - - - - - - - - - - - - - -->
     <target name="copyAdditionalFiles">
 
-    	<!-- copy lib -->
-        <copy todir="${dist.lib.dir}">
-            <fileset dir="${lib.dir}" />
-        </copy>
-    	
     	<!-- copy license -->
         <copy todir="${subdist.dir}">
             <fileset dir="${licenses.dir}" />

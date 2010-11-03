@@ -16,44 +16,111 @@
 
 package dustinthewind.utils;
 
+/**
+ * Provides a set of methods and properties that you can use to accurately measure elapsed time. It
+ * used the System.nanoTime() method. The instance members are not thread safe.
+ * 
+ * @author Alez
+ * 
+ */
 public class Stopwatch {
-	private long startNano;
-	private long stopNano;
-	private long elapsedNano;
-	private boolean running;
 
-	public Stopwatch() {
-		running = true;
+	/**
+	 * The time when the @see Stopwatch was started last time. If it was never started, this value
+	 * is 0.
+	 */
+	private long startNano;
+
+	/**
+	 * The time when the @see Stopwatch was stopped last time. If it was never stopped, this value
+	 * is 0.
+	 */
+	private long stopNano;
+
+	/**
+	 * The difference between the @see #stopNano and @see #startNano values. This value is
+	 * calculated one and stored for subsequent usage.
+	 */
+	private long elapsedNano;
+
+	/**
+	 * A value indicating whether the @see Stopwatch timer is running.
+	 */
+	private boolean isRunning;
+
+	/**
+	 * Gets a value indicating whether the @see Stopwatch timer is running.
+	 * 
+	 * @return true if the @see Stopwatch instance is currently running and measuring elapsed time
+	 *         for an interval; otherwise, false.
+	 */
+	public boolean IsRunning() {
+		return isRunning;
 	}
 
+	/**
+	 * Initializes a new instance of the @see Stopwatch class.
+	 */
+	public Stopwatch() {
+		startNano = 0;
+		stopNano = 0;
+		elapsedNano = 0;
+		isRunning = true;
+	}
+
+	/**
+	 * Initializes a new @see Stopwatch instance, sets the elapsed time to zero, and starts
+	 * measuring elapsed time.
+	 * 
+	 * @return A @see Stopwatch that has just begun measuring elapsed time.
+	 */
 	public static Stopwatch startNew() {
 		Stopwatch stopwatch = new Stopwatch();
 		stopwatch.start();
 		return stopwatch;
 	}
 
+	/**
+	 * Stops time interval measurement, resets the elapsed time to zero, and starts measuring
+	 * elapsed time.
+	 */
 	public void start() {
 		startNano = System.nanoTime();
-		running = true;
+		isRunning = true;
 	}
 
+	/**
+	 * Stops measuring elapsed time for an interval.
+	 */
 	public void stop() {
 		stopNano = System.nanoTime();
 		elapsedNano = stopNano - startNano;
-		running = false;
+		isRunning = false;
 	}
 
+	/**
+	 * Gets the total elapsed time measured by the current instance, in nanoseconds.
+	 * 
+	 * @return A long integer representing the total number of nanoseconds measured by the current
+	 *         instance.
+	 */
 	public long getElapsedNanoseconds() {
-		if (running) {
+		if (isRunning) {
 			elapsedNano = System.nanoTime() - startNano;
 		}
 		return elapsedNano;
 	}
 
+	/**
+	 * Gets the total elapsed time measured by the current instance, in milliseconds.
+	 * 
+	 * @return A long integer representing the total number of milliseconds measured by the current
+	 *         instance.
+	 */
 	public double getElapsedMilliseconds() {
-		if (running) {
+		if (isRunning) {
 			elapsedNano = System.nanoTime() - startNano;
 		}
-		return elapsedNano / (double)1000000;
+		return elapsedNano / (double) 1000000;
 	}
 }
