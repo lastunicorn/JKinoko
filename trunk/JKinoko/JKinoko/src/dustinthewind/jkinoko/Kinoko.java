@@ -155,9 +155,9 @@ public class Kinoko {
 	 * @throws Exception
 	 *             The value is less then 1.
 	 */
-	public void setTaskRunCount(int value) throws Exception {
+	public void setTaskRunCount(int value) throws KinokoException {
 		if (value < 1)
-			throw new Exception("The task run count should be an integer greater then 0.");
+			throw new KinokoException("The task run count should be an integer greater then 0.");
 		taskRunCount = value;
 	}
 
