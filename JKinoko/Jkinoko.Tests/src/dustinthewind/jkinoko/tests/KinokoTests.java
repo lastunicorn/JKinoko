@@ -9,7 +9,7 @@ import dustinthewind.jkinoko.Kinoko;
 import dustinthewind.jkinoko.KinokoException;
 import dustinthewind.jkinoko.KinokoTask;
 
-public class JKinokoTests {
+public class KinokoTests {
 
 	private Kinoko kinoko;
 
@@ -24,17 +24,17 @@ public class JKinokoTests {
 	}
 
 	@Test
-	public void testInitial_Task() {
+	public void testInitial_getTask() {
 		assertEquals(null, kinoko.getTask());
 	}
 
 	@Test
-	public void TestInitial_TaskRunCount() {
+	public void TestInitial_getTaskRunCount() {
 		assertEquals(1, kinoko.getTaskRunCount());
 	}
 
 	@Test
-	public void TestInitial_Result() {
+	public void TestInitial_getResult() {
 		assertEquals(null, kinoko.getResult());
 	}
 
