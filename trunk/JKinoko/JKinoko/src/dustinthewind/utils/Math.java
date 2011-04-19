@@ -26,7 +26,7 @@ public class Math {
 
 		return sum / values.length;
 	}
-	
+
 	public static double average(Double[] values) {
 		double sum = 0;
 
