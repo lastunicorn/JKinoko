@@ -23,10 +23,12 @@
     </tstamp>
     <property name="zip.file.name" value="JKinoko - ${zip.time} - ${dist.version.num}.zip"/>
 
-	<!-- ================================= 
-          target: distZip
-          Builds the project zip distribution
-         ================================= -->
+	<!--
+	================================================================================ 
+    target: distZip
+    Builds the project zip distribution
+    ================================================================================
+    -->
 	<target name="distZip">
 		<antcall target="jar" />
 		<antcall target="copyAdditionalFiles" />
@@ -34,18 +36,22 @@
 		<antcall target="postDist" />
 	</target>
 
-    <!-- ================================= 
-          target: distNoZip
-          Builds the project distribution without zipping it.
-         ================================= -->
+	<!--
+	================================================================================ 
+    target: distNoZip
+    Builds the project distribution without zipping it.
+    ================================================================================
+    -->
 	<target name="distNoZip">
 		<antcall target="jar" />
 		<antcall target="copyAdditionalFiles" />
 	</target>
 
-    <!-- - - - - - - - - - - - - - - - - - 
-          target: jar
-         - - - - - - - - - - - - - - - - - -->
+    <!--
+    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  
+    target: jar
+    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+    -->
 	<target name="jar" depends="compile">
 		<echo level="info">Building jar</echo>
 		<manifest file="${manifest.file}">
@@ -62,17 +68,21 @@
 		<delete file="${manifest.file}" />
 	</target>
 
-	<!-- - - - - - - - - - - - - - - - - - 
-          target: compile
-         - - - - - - - - - - - - - - - - - -->
+    <!--
+    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+    target: compile
+    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+    -->
 	<target name="compile" depends="init">
 		<echo level="info">Compiling source files</echo>
 		<javac srcdir="${src.dir}" destdir="${build.dir}" />
 	</target>
 
-    <!-- - - - - - - - - - - - - - - - - - 
-          target: init
-         - - - - - - - - - - - - - - - - - -->
+    <!--
+    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+    target: init
+    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+    -->
     <target name="init">
         <echo level="info">Initializing build folders</echo>
         <delete dir="${build.dir}" />
@@ -81,9 +91,11 @@
         <mkdir dir="${dist.dir}" />
     </target>
 
-    <!-- - - - - - - - - - - - - - - - - - 
-          target: copyFiles
-         - - - - - - - - - - - - - - - - - -->
+    <!--
+    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+    target: copyFiles
+    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+    -->
     <target name="copyAdditionalFiles">
 
     	<!-- copy license -->
@@ -99,9 +111,11 @@
     	
     </target>
 
-    <!-- - - - - - - - - - - - - - - - - - 
-          target: zip
-         - - - - - - - - - - - - - - - - - -->
+    <!--
+    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+    target: zip
+    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+    -->
     <target name="zip">
         <zip destfile="${dist.dir}/${zip.file.name}" basedir="${dist.dir}" excludes="${zip.file.name}" />
         <delete includeemptydirs="true">
@@ -112,9 +126,11 @@
         </delete>
     </target>
 
-    <!-- - - - - - - - - - - - - - - - - - 
-          target: postDist
-         - - - - - - - - - - - - - - - - - -->
+    <!--
+    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+    target: postDist
+    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+    -->
     <target name="postDist">
     </target>
 	

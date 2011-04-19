@@ -108,24 +108,24 @@ public class Kinoko {
 	}
 
 	/**
-	 * The task that is tested by Kinoko.
+	 * The task that is tested by @see Kinoko.
 	 */
 	private KinokoTask task;
 
 	/**
-	 * Gets the task that is tested by Kinoko.
+	 * Gets the task that is tested by @see Kinoko.
 	 * 
-	 * @return An KinokoTask object representing the task that is tested by Kinoko.
+	 * @return An KinokoTask object representing the task that is tested by @see Kinoko.
 	 */
 	public KinokoTask getTask() {
 		return task;
 	}
 
 	/**
-	 * Sets the task that will be tested by Kinoko.
+	 * Sets the task that will be tested by @see Kinoko.
 	 * 
 	 * @param value
-	 *            An KinokoTask object representing the task that will be tested by Kinoko.
+	 *            An KinokoTask object representing the task that will be tested by @see Kinoko.
 	 */
 	public void setTask(KinokoTask value) {
 		task = value;
@@ -134,7 +134,7 @@ public class Kinoko {
 	/**
 	 * The number of times the task is run within the test. (To minimize the measurement errors.)
 	 */
-	private int taskRunCount = 1;
+	private int taskRunCount;
 
 	/**
 	 * Gets the number of times the task is run within the test. The task should be run multiple
@@ -176,14 +176,43 @@ public class Kinoko {
 	}
 
 	/**
+	 * Initializes a new instance of the @see Kinoko class with default values.
+	 * 
+	 * @throws KinokoException
+	 *             The task run count should be an integer greater then 0.
+	 */
+	public Kinoko() throws KinokoException {
+		this(null, 1);
+	}
+
+	/**
+	 * Initializes a new instance of the @see Kinoko class with the task that is to be
+	 * tested and the number of times the test should be performed.
+	 * 
+	 * @param task
+	 *            The task that is to be tested.
+	 * @param taskRunCount
+	 *            The number of times the task is run.
+	 * @throws KinokoException
+	 *             The task run count should be an integer greater then 0.
+	 */
+	public Kinoko(KinokoTask task, int taskRunCount) throws KinokoException {
+		if (taskRunCount < 1)
+			throw new KinokoException("The task run count should be an integer greater then 0.");
+
+		this.task = task;
+		this.taskRunCount = taskRunCount;
+	}
+
+	/**
 	 * Runs the task and measures the times.
 	 * 
-	 * @throws Exception
+	 * @throws KinokoException
 	 *             No task was set to be tested.
 	 */
-	public void Run() throws Exception {
+	public void Run() throws KinokoException {
 		if (task == null)
-			throw new Exception("No task was set to be tested.");
+			throw new KinokoException("No task was set to be tested.");
 
 		KinokoResult result = new KinokoResult();
 
