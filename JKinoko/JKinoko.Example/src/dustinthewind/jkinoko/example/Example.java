@@ -34,23 +34,26 @@ public class Example {
 		System.out.println("Java Kinoko Usage Example");
 		System.out.println("===============================================================================");
 		System.out.println(String.format("This example is running a task that just sleeps for %s milliseconds.", intFormat.format(sleepTime)));
-		System.out.println("Kinoko will measure a time a little bigger then the right one (around");
-		System.out.println("1 milisecond bigger). It represents the measurement error cumulated from:");
+		System.out.println("Obs: The measured time is little bigger then the right one (around 1 milisecond");
+		System.out.println("bigger). It represents the measurement error cumulated from:");
 		System.out.println("  1) the time necessary to actually call the task method;");
 		System.out.println("  2) the measurement error of the Stopwatch class;");
-		System.out.println("  3) the error of the Thread.Sleep() method");
+		System.out.println("  3) the error of the Thread.Sleep() method.");
 		System.out.println();
 
 		try {
-			Kinoko kinoko = new Kinoko();
+			// Create the testing environment.
+			Kinoko kinoko = new Kinoko(new Task(), repeatCount);
 			kinoko.addBeforeTaskRunEventListener(new Kinoko_BeforeTaskRun());
 			kinoko.addAfterTaskRunEventListener(new Kinoko_AfterTaskRun());
-			kinoko.setTaskRunCount(repeatCount);
-			kinoko.setTask(new Task());
+
+			// Run the test.
 			kinoko.Run();
 
+			// Collect the results.
 			KinokoResult result = kinoko.getResult();
 
+			// Display the results.
 			System.out.println();
 			System.out.println(String.format("Avarage time: %.2f milisec", result.getAverage()));
 		} catch (Exception ex) {
