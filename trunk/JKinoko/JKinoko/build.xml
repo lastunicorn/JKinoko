@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="JKinoko" default="distZip">
+<project name="JKinoko" default="distZipClean">
+	
+	<property name="dist.name" value="JKinoko" />
 	
 	<!-- Project directories -->
 	<property name="src.dir" location="src" />
@@ -8,7 +10,7 @@
 	<!-- Dist directories -->
 	<property name="build.dir" location="build" />
 	<property name="dist.dir" location="dist" />
-	<property name="subdist.dir" location="${dist.dir}/JKinoko" />
+	<property name="subdist.dir" location="${dist.dir}/${dist.name}" />
 	<property name="dist.lib.dir" location="${subdist.dir}/lib" />
 	<property name="dist.jar.name" value="jkinoko.jar" />
 	<property name="dist.version.num" value="1.0.0" />
@@ -21,30 +23,33 @@
 	<tstamp>
         <format property="zip.time" pattern="yyyy MM dd HHmm" />
     </tstamp>
-    <property name="zip.file.name" value="JKinoko - ${zip.time} - ${dist.version.num}.zip"/>
+    <property name="zip.file.name" value="${dist.name} - ${zip.time} - ${dist.version.num}.zip"/>
 
 	<!--
 	================================================================================ 
-    target: distZip
-    Builds the project zip distribution
+    target: distZipClean
+    Builds the project's zipped distribution.
     ================================================================================
     -->
-	<target name="distZip">
-		<antcall target="jar" />
-		<antcall target="copyAdditionalFiles" />
-		<antcall target="zip" />
-		<antcall target="postDist" />
+	<target name="distZipClean" depends="distNoZip,zipAndDelete">
+	</target>
+
+	<!--
+	================================================================================ 
+    target: distAndZip
+    Builds the project's zipped distribution. But leaves behind the unzipped files.
+    ================================================================================
+    -->
+	<target name="distAndZip" depends="distNoZip,zip">
 	</target>
 
 	<!--
 	================================================================================ 
     target: distNoZip
-    Builds the project distribution without zipping it.
+    Builds the project's distribution without zipping it.
     ================================================================================
     -->
-	<target name="distNoZip">
-		<antcall target="jar" />
-		<antcall target="copyAdditionalFiles" />
+	<target name="distNoZip" depends="jar,copyAdditionalFiles">
 	</target>
 
     <!--
@@ -70,33 +75,11 @@
 
     <!--
     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-    target: compile
-    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-    -->
-	<target name="compile" depends="init">
-		<echo level="info">Compiling source files</echo>
-		<javac srcdir="${src.dir}" destdir="${build.dir}" />
-	</target>
-
-    <!--
-    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-    target: init
-    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-    -->
-    <target name="init">
-        <echo level="info">Initializing build folders</echo>
-        <delete dir="${build.dir}" />
-        <delete dir="${dist.dir}" />
-        <mkdir dir="${build.dir}" />
-        <mkdir dir="${dist.dir}" />
-    </target>
-
-    <!--
-    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
     target: copyFiles
+    Copies additional files needed for a distribution. (besides the jar file)
     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
     -->
-    <target name="copyAdditionalFiles">
+    <target name="copyAdditionalFiles" depends="jar">
 
     	<!-- copy license -->
         <copy todir="${subdist.dir}">
@@ -116,8 +99,16 @@
     target: zip
     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
     -->
-    <target name="zip">
+    <target name="zip" depends="distNoZip">
         <zip destfile="${dist.dir}/${zip.file.name}" basedir="${dist.dir}" excludes="${zip.file.name}" />
+    </target>
+
+    <!--
+    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+    target: zipAndDelete
+    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+    -->
+    <target name="zipAndDelete" depends="zip">
         <delete includeemptydirs="true">
             <fileset dir="${dist.dir}">
                 <include name="**/*" />
@@ -128,10 +119,25 @@
 
     <!--
     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-    target: postDist
+    target: compile
     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
     -->
-    <target name="postDist">
+	<target name="compile" depends="init">
+		<echo level="info">Compiling source files</echo>
+		<javac srcdir="${src.dir}" destdir="${build.dir}" />
+	</target>
+
+    <!--
+    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+    target: init
+    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+    -->
+    <target name="init">
+        <echo level="info">Initializing build folders</echo>
+        <delete dir="${build.dir}" />
+        <delete dir="${dist.dir}" />
+        <mkdir dir="${build.dir}" />
+        <mkdir dir="${dist.dir}" />
     </target>
 	
 </project>
