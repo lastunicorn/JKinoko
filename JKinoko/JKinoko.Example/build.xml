@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="JKinoko.Examples" default="distZip">
+<project name="JKinoko.Examples" default="distZipClean">
 	
 	<!-- Project directories -->
+	<property name="jkinoko.dir" location="../JKinoko" />
 	<property name="src.dir" location="src" />
-	<property name="licenses.dir" location="licenses" />
+	<property name="scripts.dir" location="scripts" />
 	
 	<!-- Dist directories -->
 	<property name="build.dir" location="build" />
@@ -25,26 +26,29 @@
 
 	<!--
 	================================================================================ 
-    target: distZip
-    Builds the project zip distribution
+    target: distZipClean
+    Builds the project's zip distribution.
     ================================================================================
     -->
-	<target name="distZip">
-		<antcall target="jar" />
-		<antcall target="copyAdditionalFiles" />
-		<antcall target="zip" />
-		<antcall target="postDist" />
+	<target name="distZipClean" depends="distNoZip, zipAndDelete">
+	</target>
+
+	<!--
+	================================================================================ 
+    target: distAndZip
+    Builds the project's zip distribution. But leaves behind the unzipped files.
+    ================================================================================
+    -->
+	<target name="distAndZip" depends="distNoZip, zip">
 	</target>
 
 	<!--
 	================================================================================ 
     target: distNoZip
-    Builds the project distribution without zipping it.
+    Builds the project's distribution without zipping it.
     ================================================================================
     -->
-	<target name="distNoZip">
-		<antcall target="jar" />
-		<antcall target="copyAdditionalFiles" />
+	<target name="distNoZip" depends="jar, copyAdditionalFiles">
 	</target>
 
     <!--
@@ -70,12 +74,61 @@
 
     <!--
     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+    target: copyFiles
+    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+    -->
+    <target name="copyAdditionalFiles" depends="jar">
+    	
+    	<!-- copy jkinoko.jar -->
+        <copy file="${jkinoko.dir}/dist/JKinoko/lib/jkinoko.jar" todir="${dist.lib.dir}"/>
+
+    	<!-- copy license -->
+        <copy file="${jkinoko.dir}/dist/JKinoko/license.txt" todir="${subdist.dir}"/>
+    	
+    	<!-- copy changelog -->
+        <copy file="${jkinoko.dir}/dist/JKinoko/changelog.txt" todir="${subdist.dir}"/>
+    	
+    	<!-- copy readme -->
+        <copy file="${jkinoko.dir}/dist/JKinoko/readme.txt" todir="${subdist.dir}"/>
+    	
+    	<!-- copy cmd file -->
+        <copy file="${scripts.dir}/JKinoko.Example.cmd" todir="${subdist.dir}"/>
+    	
+    </target>
+
+    <!--
+    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+    target: zip
+    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+    -->
+    <target name="zip">
+        <zip destfile="${dist.dir}/${zip.file.name}" basedir="${dist.dir}" excludes="${zip.file.name}" />
+    </target>
+
+    <!--
+    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+    target: zipAndDelete
+    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+    -->
+    <target name="zipAndDelete" depends="zip">
+        <delete includeemptydirs="true">
+            <fileset dir="${dist.dir}">
+                <include name="**/*" />
+                <exclude name="${zip.file.name}" />
+            </fileset>
+        </delete>
+    </target>
+
+    <!--
+    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
     target: compile
     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
     -->
 	<target name="compile" depends="init">
+		<echo level="info">Compiling JKinoko project</echo>
+		<ant antfile="../JKinoko/build.xml" target="distAndZip" inheritAll="false"/>
 		<echo level="info">Compiling source files</echo>
-		<javac srcdir="${src.dir}" destdir="${build.dir}" />
+		<javac srcdir="${src.dir}" destdir="${build.dir}" classpath="${jkinoko.dir}/dist/JKinoko/lib/jkinoko.jar" />
 	</target>
 
     <!--
@@ -89,49 +142,6 @@
         <delete dir="${dist.dir}" />
         <mkdir dir="${build.dir}" />
         <mkdir dir="${dist.dir}" />
-    </target>
-
-    <!--
-    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-    target: copyFiles
-    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-    -->
-    <target name="copyAdditionalFiles">
-
-    	<!-- copy license -->
-        <copy todir="${subdist.dir}">
-            <fileset dir="../JKinoko/${licenses.dir}" />
-        </copy>
-    	
-    	<!-- copy changelog -->
-        <copy file="../JKinoko/changelog.txt" todir="${subdist.dir}"/>
-    	
-    	<!-- copy readme -->
-        <copy file="../JKinoko/readme.txt" todir="${subdist.dir}"/>
-    	
-    </target>
-
-    <!--
-    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-    target: zip
-    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-    -->
-    <target name="zip">
-        <zip destfile="${dist.dir}/${zip.file.name}" basedir="${dist.dir}" excludes="${zip.file.name}" />
-        <delete includeemptydirs="true">
-            <fileset dir="${dist.dir}">
-                <include name="**/*" />
-                <exclude name="${zip.file.name}" />
-            </fileset>
-        </delete>
-    </target>
-
-    <!--
-    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-    target: postDist
-    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-    -->
-    <target name="postDist">
     </target>
 	
 </project>
