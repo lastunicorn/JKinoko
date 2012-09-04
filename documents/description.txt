@@ -1,0 +1,12 @@
+JKinoko v1.0
+============
+
+There are three projects in the solution at the moment:
+	- JKinoko - the framework
+	- JKinoko.Example - an example of how the framework can be used.
+	- JKinoko.Tests - unit tests - incomplete
+
+
+Future features
+------------------
+	- Create a console application that can take as parameter a jar and a method name and measure it.
